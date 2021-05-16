@@ -1,0 +1,25 @@
+name: Build
+on:
+  schedule:
+  - cron: "0 8 * * 0"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: cython/cython
+    - uses: actions/setup-python@v2
+      with:
+        python-version: 3.9.x
+
+    - run: |
+        pip install -U setuptools wheel
+        pip wheel --wheel-dir=dist .
+
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist
+        name: cython-master-cp39-win_amd64
